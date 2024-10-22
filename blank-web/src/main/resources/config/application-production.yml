@@ -1,0 +1,55 @@
+--- # server environment
+spring.config.activate.on-profile: production
+
+logging:
+    config: classpath:logback-file.xml
+
+solid.swagger.enable: false
+springdoc.api-docs.enabled: false
+
+management:
+  endpoints:
+    web:
+      base-path: /monitor
+      exposure:
+        include:
+          - "health"
+          - "info"
+          - "metrics"
+          - "prometheus"
+    enabled-by-default: true
+  server:
+    add-application-context-header: false
+    port: 8081
+  endpoint:
+    prometheus:
+      enabled: true
+    health:
+      show-details: always
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+spring:
+  datasource:
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 50 # max pool size
+      connection-timeout: 30000 # wait for connection for most 30 secs
+      idleTimeout: 300000 # connection would be removed after 5 minutes
+
+---
+spring.config.activate.on-profile: db-production
+
+spring.jpa:
+  database: POSTGRESQL
+  database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+spring.datasource:
+  url: ${DB_URL}
+  driverClassName: org.postgresql.Driver
+  username: ${DB_USERNAME}
+  password: ${DB_PASSWORD}
+  xa:
+    dataSourceClassName: org.postgresql.xa.PGXADataSource

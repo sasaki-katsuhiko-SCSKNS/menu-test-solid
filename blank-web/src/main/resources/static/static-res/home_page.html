@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32"
+          href="../favicon/favicon.ico">
+    <title>Home Page</title>
+  </head>
+<body>
+   <div class="text"></div>
+   <div>
+	   <ul>
+		   <li><a href="/blank/swagger-ui.html">👉 Swagger Console</a></li>
+		   <li><a href="/blank/swagger-ui">👉 Swagger Open API Json</a></li>
+	   </ul> 
+	 </div>
+    <div>
+        <button type="button" onclick="logout()">Sign out</button>
+    </div>
+</body>
+<script>
+  const token = localStorage.getItem("X-Auth-Token");
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "/blank/user/info", false);
+  xhr.setRequestHeader("X-Auth-Token", token);
+  xhr.send();
+  let user = "";
+  if(xhr.status === 200) {
+    const data = JSON.parse(xhr.responseText);
+    const username = data.data.name;
+    document.getElementsByClassName("text")[0].innerHTML = "<h3>🎉Hello " + username + "!!!</h3>";
+    user = username;
+  } else {
+    window.location.href = "/blank/static-res/index.html";
+  }
+
+  const webSocket = new WebSocket(
+      "ws://localhost:8080/blank/websocket/common/"+user,
+      ["x-auth-token", token]
+  );
+
+  webSocket.onopen = function(event) {
+      console.log("open");
+  }
+
+  webSocket.onmessage = function(event) {
+      console.log("message {}", event.data);
+  }
+
+  webSocket.onerror = function(event) {
+      console.log("error", event);
+  }
+
+  webSocket.onclose = function(event) {
+      console.log("close", event);
+  }
+
+
+  function logout() {
+      const token = localStorage.getItem("X-Auth-Token");
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "/blank/logout", false);
+      xhr.setRequestHeader("X-Auth-Token", token);
+      xhr.send();
+      if(xhr.status === 200) {
+        localStorage.removeItem("X-Auth-Token");
+        window.location.href = "/blank/static-res/index.html";
+      }
+  }
+
+</script>
+</html>

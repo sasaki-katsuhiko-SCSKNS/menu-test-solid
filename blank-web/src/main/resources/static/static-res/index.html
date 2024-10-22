@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32"
+          href="./favicon/favicon.ico">
+    <title>Index</title>
+  </head>
+<script>
+  const token = localStorage.getItem("X-Auth-Token");
+    if (token && validate(token)) {
+      // 显示 home_page.html
+      window.location.href = "/blank/static-res/home_page.html";
+    } else {
+        localStorage.removeItem("X-Auth-Token");
+        // 显示 login.html
+        window.location.href = "/blank/static-res/login.html";
+    }
+
+    function validate(token) {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/blank/validate", false);
+        xhr.setRequestHeader("X-Auth-Token", token);
+        xhr.send();
+        return xhr.status === 200;
+
+    }
+
+</script>
+</html>

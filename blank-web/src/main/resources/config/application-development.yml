@@ -1,0 +1,56 @@
+--- # local development environment
+spring.config.activate.on-profile: development
+spring.devtools.restart.enabled: false
+
+# serialize the JSON output
+spring.jackson:
+   serialization:
+    INDENT_OUTPUT: true
+
+
+solid.swagger.enable: true
+solid.swagger:
+  application-name: "Blank Web"
+  application-description: "Blank Web"
+  application-version: "1.0.0"
+  contact-name: "YNA"
+  use-token-for-auth: true
+  token-name: "X-Auth-Token"
+
+springdoc:
+  api-docs.path: /swagger-ui
+  api-docs.groups.enabled: true
+  packages-to-scan:
+    - com.blank.web
+    - com.ymsl.solid
+  packages-to-exclude:
+    - com.ymsl.solid.websocket
+
+
+management:
+  endpoints:
+    web:
+      base-path: /monitor
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    prometheus:
+      enabled: true
+  server:
+    add-application-context-header: false
+    port: 8081
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+
+spring:
+  datasource:
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20 # max pool size
+      connection-timeout: 10000 # wait for connection for most 10 secs
+      idleTimeout: 300000 # connection would be removed after 5 minutes

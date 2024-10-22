@@ -1,0 +1,14 @@
+services:
+  web:
+    image: blank-web:latest
+    container_name: blank-web
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+      - APP_PROFILES_ACTIVE=production
+      - DB_URL=jdbc:postgresql://192.168.0.1:15432/postgres
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=foo

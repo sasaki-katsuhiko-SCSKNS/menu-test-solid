@@ -1,0 +1,27 @@
+plugins {
+  id 'com.ymsl.solid.build.framework-library'
+}
+
+dependencies {
+    api "com.ymsl.solid:solid-jpa"
+
+    api "com.ymsl.solid:solid-redis"
+    
+    // For single datasource
+    //No Jta use Hikari as the default connection pool.
+    api("com.zaxxer:HikariCP") {
+        exclude group: "org.slf4j", module: "slf4j-api"
+    }
+    api "jakarta.transaction:jakarta.transaction-api"
+
+    //For multiple datasources and jta
+    //use atomikos.
+    //implementation "com.atomikos:transactions-spring-boot3-starter:${versions.atomikos}"
+
+    // Testing dependencies
+    testImplementation "com.ymsl.solid:solid-test"
+    testImplementation "com.h2database:h2"
+    testImplementation "org.postgresql:postgresql"
+    //testCompile "org.flywaydb:flyway-core"
+	  testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
